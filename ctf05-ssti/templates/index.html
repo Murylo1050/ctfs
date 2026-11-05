@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Criar cartão{% endblock %}
+
+{% block content %}
+  <form method="post" action="{{ url_for('index') }}" class="stack">
+    <label>
+      Seu nome
+      <input name="name" value="{{ name }}" placeholder="ex.: Ana" required autofocus>
+    </label>
+    <button type="submit">Gerar pré-visualização</button>
+  </form>
+
+  <p class="hint">
+    A pré-visualização é processada no servidor como um template Jinja2.
+  </p>
+
+  <!-- TODO(security): não usar render_template_string com entrada controlada pelo usuário. -->
+
+  {% if error %}
+    <p class="alert alert-error">{{ error }}</p>
+  {% endif %}
+
+  {% if preview %}
+    <section class="debug">
+      <h3>Pré-visualização</h3>
+      <div class="preview">{{ preview }}</div>
+    </section>
+  {% endif %}
+{% endblock %}

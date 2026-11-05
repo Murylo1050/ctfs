@@ -1,0 +1,193 @@
+name: minicurso-ctf-web
+
+services:
+  ctf01-cookie:
+    build:
+      context: ./ctf01-cookie
+    container_name: ctf01-cookie
+    environment:
+      FLAG: "flag{c00k13s_s4o_cr0c4nt3s}"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8001:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  ctf02-sqli:
+    build:
+      context: ./ctf02-sqli
+    container_name: ctf02-sqli
+    environment:
+      FLAG: "flag{sq1_1nj3ct10n_b4s1c4}"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8002:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  ctf03-idor:
+    build:
+      context: ./ctf03-idor
+    container_name: ctf03-idor
+    environment:
+      FLAG: "flag{1d0r_n0t4s_d0_adm1n}"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8003:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  ctf04-cmdi:
+    build:
+      context: ./ctf04-cmdi
+    container_name: ctf04-cmdi
+    environment:
+      FLAG: "flag{c0mm4nd_1nj3ct10n_b4s1c4}"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8004:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  ctf05-ssti:
+    build:
+      context: ./ctf05-ssti
+    container_name: ctf05-ssti
+    environment:
+      FLAG: "flag{sst1_j1nj4_rce}"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8005:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  ctf06-ssrf:
+    build:
+      context: ./ctf06-ssrf
+    image: ctf06-ssrf-lab
+    container_name: ctf06-ssrf
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8006:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    depends_on:
+      flag-service:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  flag-service:
+    build:
+      context: ./ctf06-ssrf
+    image: ctf06-ssrf-lab
+    container_name: ctf06-flag-service
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "1", "--threads", "2", "flag_service:app"]
+    environment:
+      FLAG: "flag{ssrf_r3d3_1nt3rn4}"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped

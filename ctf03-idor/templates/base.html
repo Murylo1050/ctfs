@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Entrar{% endblock %} · CTF 03</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="card">
+    <header class="brand">
+      <span class="badge">CTF 03 · fácil</span>
+      <h1>NotasWeb</h1>
+      <p class="muted">Um bloco de notas privado. Cada usuário deveria ver apenas as suas notas.</p>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+      Ambiente de laboratório · não use em produção
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ note.title }}{% endblock %}
+
+{% block content %}
+  <article class="note">
+    <span class="badge">Nota #{{ note_id }}</span>
+    <h2>{{ note.title }}</h2>
+    <p class="muted">Dono: <code>{{ note.owner }}</code></p>
+    <pre class="note-body">{{ note.body }}</pre>
+  </article>
+
+  <!-- TODO(security): verificar se a nota pertence ao usuário autenticado. -->
+
+  <p class="actions">
+    <a class="link" href="{{ url_for('notes') }}">Voltar para minhas notas</a>
+    &nbsp;·&nbsp;
+    <a class="link" href="{{ url_for('logout') }}">Sair</a>
+  </p>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Diagnóstico{% endblock %}
+
+{% block content %}
+  <form method="post" action="{{ url_for('index') }}" class="stack">
+    <label>
+      Host ou IP
+      <input name="host" value="{{ host }}" placeholder="ex.: localhost" required autofocus>
+    </label>
+    <button type="submit">Consultar</button>
+  </form>
+
+  <p class="hint">
+    Exemplo de consulta: <code>getent hosts localhost</code>
+  </p>
+
+  <!-- TODO(security): revisar o uso de shell=True e validar o parâmetro host. -->
+
+  {% if error %}
+    <p class="alert alert-error">{{ error }}</p>
+  {% endif %}
+
+  {% if output is not none %}
+    <section class="debug">
+      <h3>Saída da consulta</h3>
+      <pre>{{ output }}</pre>
+    </section>
+  {% endif %}
+{% endblock %}

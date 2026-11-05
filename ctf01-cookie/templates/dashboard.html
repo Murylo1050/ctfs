@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Painel{% endblock %}
+
+{% block content %}
+  <p class="welcome">Olá, <strong>{{ user }}</strong>.</p>
+
+  {% if flag %}
+    <section class="result success">
+      <span class="badge badge-success">ACESSO ADMIN</span>
+      <h2>Parabéns!</h2>
+      <p>Você encontrou a flag:</p>
+      <code class="flag">{{ flag }}</code>
+    </section>
+  {% else %}
+    <p class="alert alert-error">Esta conta não tem privilégios de administrador.</p>
+
+    <section class="debug">
+      <h3>Depuração de sessão</h3>
+      <p>Cookie atual:</p>
+      <code class="wrap">{{ cookie }}</code>
+      <p>Conteúdo decodificado:</p>
+      <pre>{{ session_json }}</pre>
+    </section>
+
+    <details class="hint">
+      <summary>Dica</summary>
+      <p>
+        O servidor confia no campo <code>role</code> do cookie. Altere o valor para
+        <code>admin</code>, codifique novamente em base64 e envie o cookie.
+      </p>
+    </details>
+  {% endif %}
+
+  <p class="actions"><a class="link" href="{{ url_for('logout') }}">Sair</a></p>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Minhas notas{% endblock %}
+
+{% block content %}
+  <p class="welcome">Logado como <strong>{{ user }}</strong>.</p>
+
+  <h2>Suas notas</h2>
+
+  {% if notes %}
+    <div class="note-list">
+      {% for note in notes %}
+        <a class="note-link" href="{{ url_for('note', note_id=note.id) }}">
+          <span class="note-id">#{{ note.id }}</span>
+          <span>
+            <strong>{{ note.title }}</strong>
+            <span class="note-preview">{{ note.body.split('\n')[0] }}</span>
+          </span>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="hint">Você ainda não tem notas.</p>
+  {% endif %}
+
+  <p class="actions"><a class="link" href="{{ url_for('logout') }}">Sair</a></p>
+{% endblock %}

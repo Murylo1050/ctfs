@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TemplateLab{% endblock %} · CTF 05</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="card">
+    <header class="brand">
+      <span class="badge">CTF 05 · médio</span>
+      <h1>TemplateLab</h1>
+      <p class="muted">Cartões personalizados renderizados com Jinja2 no servidor.</p>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+      Ambiente de laboratório · não use em produção
+    </footer>
+  </main>
+</body>
+</html>
