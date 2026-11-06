@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% from "_product_card.html" import product_card %}
+
+{% block content %}
+  <div class="breadcrumb">Início / Busca</div>
+
+  <div class="section-head">
+    <div>
+      <h1 class="mt-0 mb-0">Busca no catálogo</h1>
+      {% if query %}
+        <p class="search-summary">
+          Resultados para <strong>{{ query|safe }}</strong> ·
+          {{ results|length }} encontrado(s)
+        </p>
+      {% else %}
+        <p>Digite um termo para buscar produtos.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+  {% endif %}
+
+  {% if query and not error %}
+    <div class="product-grid">
+      {% for product in results %}
+        {{ product_card(product) }}
+      {% else %}
+        <div class="empty">
+          <span class="big">🔎</span>
+          Nenhum produto corresponde a essa busca.
+        </div>
+      {% endfor %}
+    </div>
+  {% elif not query %}
+    <div class="empty">
+      <span class="big">🔎</span>
+      Tente buscar por “fone”, “teclado” ou “monitor”.
+    </div>
+  {% endif %}
+{% endblock %}

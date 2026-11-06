@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="breadcrumb">Início / Minha conta</div>
+
+  <div class="two-col">
+    <section class="panel">
+      <h1 class="mt-0">Minha conta</h1>
+      <p class="muted">Dados cadastrados na VulnShop.</p>
+
+      <div class="table-wrap mt-2">
+        <table>
+          <tbody>
+            <tr>
+              <th>Nome</th>
+              <td>{{ user.full_name }}</td>
+            </tr>
+            <tr>
+              <th>Usuário</th>
+              <td><code>{{ user.username }}</code></td>
+            </tr>
+            <tr>
+              <th>E-mail</th>
+              <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+              <th>Papel</th>
+              <td><span class="badge">{{ user.role }}</span></td>
+            </tr>
+            <tr>
+              <th>Pedidos</th>
+              <td>{{ order_count }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside class="stack">
+      <section class="panel">
+        <h2 class="mt-0">Chave da API</h2>
+        <p class="muted small">
+          Use esta chave no cabeçalho <code>X-API-Key</code> para consultar
+          pedidos pela API da loja.
+        </p>
+        <div class="api-key">{{ user.api_key }}</div>
+        <p class="mt-1 mb-0">
+          <a class="btn ghost small" href="{{ url_for('api_docs') }}">Ver documentação da API</a>
+        </p>
+      </section>
+
+      <section class="panel soft">
+        <h3 class="mt-0">Atalhos</h3>
+        <p class="mb-1"><a href="{{ url_for('orders') }}">Ver meus pedidos</a></p>
+        <p class="mb-1"><a href="{{ url_for('cart') }}">Abrir carrinho</a></p>
+        <p class="mb-0"><a href="{{ url_for('shipping') }}">Calcular frete</a></p>
+      </section>
+    </aside>
+  </div>
+{% endblock %}

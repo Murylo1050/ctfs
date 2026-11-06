@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if denied %}
+    <div class="panel narrow">
+      <span class="badge orange">Acesso restrito</span>
+      <h1>Acesso negado</h1>
+      <p class="muted">
+        Esta área é exclusiva para administradores da loja. O papel atual da
+        sessão é <code>{{ g.user.role }}</code>.
+      </p>
+      <p class="mt-2 mb-0">
+        <a class="btn" href="{{ url_for('index') }}">Voltar para a loja</a>
+        <a class="btn ghost" href="{{ url_for('profile') }}">Minha conta</a>
+      </p>
+    </div>
+  {% else %}
+    <section class="admin-hero">
+      <p class="eyebrow">VulnShop · operações</p>
+      <h1>Painel administrativo</h1>
+      <p>Visão geral da loja e chave de integração do ambiente.</p>
+    </section>
+
+    <div class="flag-box mb-2">
+      <strong>Chave de integração do painel:</strong>
+      <code>{{ flag }}</code>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat">
+        <span>Usuários</span>
+        <strong>{{ stats.users }}</strong>
+      </div>
+      <div class="stat">
+        <span>Pedidos</span>
+        <strong>{{ stats.orders }}</strong>
+      </div>
+      <div class="stat">
+        <span>Produtos ativos</span>
+        <strong>{{ stats.products }}</strong>
+      </div>
+    </div>
+
+    <section class="panel">
+      <h2 class="mt-0">Usuários cadastrados</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Usuário</th>
+              <th>E-mail</th>
+              <th>Papel</th>
+              <th>Criado em</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+              <tr>
+                <td>{{ user.id }}</td>
+                <td><code>{{ user.username }}</code></td>
+                <td>{{ user.email }}</td>
+                <td><span class="badge">{{ user.role }}</span></td>
+                <td>{{ user.created_at }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

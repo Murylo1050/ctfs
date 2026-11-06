@@ -1,4 +1,4 @@
-# Minicurso de Segurança da Informação — 11 CTFs Web
+# Minicurso de Segurança da Informação — 11 CTFs Web + VulnShop
 
 Onze desafios web containerizados para prática: **6 fáceis**, **3 médios** e **2 difíceis**. Cada desafio explora uma classe diferente de falha:
 
@@ -14,9 +14,11 @@ Onze desafios web containerizados para prática: **6 fáceis**, **3 médios** e 
 - confusão de algoritmos em JWT;
 - desserialização insegura com Python pickle.
 
+Além dos desafios isolados, o laboratório inclui a **VulnShop**, uma aplicação de e-commerce completa que reúne várias falhas em um fluxo realista de compra.
+
 Todas as aplicações são **intencionalmente vulneráveis**. Execute apenas em ambiente de laboratório.
 
-## Desafios
+## CTFs
 
 | # | Desafio | Nível | Tema | URL local | Credenciais |
 |---|---------|-------|------|-----------|-------------|
@@ -33,6 +35,18 @@ Todas as aplicações são **intencionalmente vulneráveis**. Execute apenas em 
 | 11 | Session Store | difícil | Desserialização insegura (pickle) | http://localhost:8011 | — |
 
 As flags estão no formato `flag{...}`.
+
+## VulnShop — aplicação integrada
+
+A **VulnShop** é um mini e-commerce com vitrine, busca, cadastro, carrinho, checkout, pedidos, notas fiscais, painel administrativo e API. Diferente dos CTFs isolados, as falhas aparecem em um sistema só, com dados e fluxos compartilhados.
+
+| Aplicação | Tema | URL local | Credenciais |
+|-----------|------|-----------|-------------|
+| VulnShop | SQLi, Command Injection, cookie sem assinatura, IDOR, BOLA, path traversal, XSS refletido, open redirect, mass assignment e CSRF | http://localhost:8012 | `demo` / `demo123` e `alice` / `alice123` |
+
+A aplicação tem **6 flags principais** (`SQLI`, `CMDI`, `COOKIE`, `IDOR`, `BOLA` e `TRAVERSAL`) e desafios extras. O serviço interno `shipping-service` não publica porta no host e guarda apenas a flag de Command Injection.
+
+O briefing do aluno está em [`vulnshop/README.md`](./vulnshop/README.md) e o gabarito completo em [`vulnshop/GABARITO.md`](./vulnshop/GABARITO.md).
 
 ## Requisitos
 
@@ -70,6 +84,12 @@ docker compose up --build -d
 ```
 
 O CTF 01 é stateless. O CTF 02 recria o banco SQLite em `/tmp` a cada recriação do container. Os CTFs 04, 05, 07, 09 e 11 recriam o arquivo `/tmp/flag.txt` a partir da variável de ambiente `FLAG`. Os CTFs 08 e 10 mantêm os dados em memória e reiniciam limpos. O CTF 06 recria o serviço interno de flags.
+
+A VulnShop recria o banco SQLite `/tmp/vulnshop.db`, as notas fiscais e os arquivos de flag em `/tmp` a cada recriação do container. Para zerar cadastros, pedidos e carrinhos, recrie os serviços da loja:
+
+```bash
+docker compose up -d --force-recreate vulnshop shipping-service
+```
 
 ## Briefing — CTF 01: Cookie Monsters
 
@@ -193,6 +213,25 @@ O Session Store guarda as preferências do perfil em um cookie `profile` codific
 3. `pickle.loads` executa o método `__reduce__` de objetos ao desserializar.
 4. Crie um payload que execute `cat /tmp/flag.txt` (por exemplo, com `subprocess.check_output`) e envie o base64 no formulário de restauração. O resultado é exibido na página.
 
+## Briefing — VulnShop
+
+A VulnShop é uma loja completa em http://localhost:8012. Explore o fluxo normal (login, busca, carrinho, checkout, pedidos, frete e notas fiscais) e investigue as decisões de implementação. Há **6 flags principais** e vulnerabilidades extras.
+
+**Contas:** `demo` / `demo123` e `alice` / `alice123`. As credenciais do administrador não são fornecidas.
+
+**Desafios principais:**
+
+1. **Busca oculta (SQL Injection):** existe um produto interno que não aparece na vitrine. A busca pública monta a consulta SQL com a entrada do usuário. Encontre o registro oculto.
+2. **Frete sob demanda (Command Injection):** o cálculo de frete é feito por um serviço interno de logística. Existe uma flag dentro desse container. Obtenha execução de comandos e leia `/tmp/flag.txt`.
+3. **Sessão de administrador (cookie):** o servidor confia no cookie `shop_session` para saber quem é o usuário e qual é o papel dele. Torne-se administrador e abra `/admin`.
+4. **Pedido alheio (IDOR):** a rota `/orders/<id>` mostra os detalhes de um pedido. Os IDs são sequenciais e a aplicação não confere o proprietário. Leia a observação de um pedido que não é seu.
+5. **API de pedidos (BOLA):** a API usa `X-API-Key`. Sua chave aparece na página do perfil. O endpoint `/api/v1/orders/<id>` autentica a chave, mas não verifica a qual usuário o pedido pertence.
+6. **Nota fiscal indiscreta (Path Traversal):** o download de notas fiscais aceita um nome de arquivo e só valida a extensão `.txt`. Saia do diretório de notas e leia a flag em `/tmp`.
+
+**Vulnerabilidades extras:** XSS refletido na busca, open redirect no login, mass assignment no cadastro (`role`), CSRF nos formulários e senhas armazenadas em texto puro.
+
+**Dicas progressivas:** consulte [`vulnshop/README.md`](./vulnshop/README.md). O gabarito fica em [`vulnshop/GABARITO.md`](./vulnshop/GABARITO.md) e não deve ser distribuído aos alunos.
+
 ## Estrutura do projeto
 
 ```text
@@ -262,21 +301,39 @@ O Session Store guarda as preferências do perfil em um cookie `profile` codific
 │   ├── requirements.txt
 │   ├── static/style.css
 │   └── templates/
-└── ctf11-deserialization/
+├── ctf11-deserialization/
+│   ├── Dockerfile
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── static/style.css
+│   └── templates/
+└── vulnshop/
     ├── Dockerfile
+    ├── shipping.Dockerfile
     ├── app.py
+    ├── db.py
+    ├── shipping_service.py
     ├── requirements.txt
-    ├── static/style.css
-    └── templates/
+    ├── scripts/
+    │   └── frete.sh
+    ├── static/
+    │   └── style.css
+    ├── templates/
+    ├── README.md
+    └── GABARITO.md
 ```
 
 ## Notas para o instrutor
 
-- As soluções completas estão em [`GABARITO.md`](./GABARITO.md). Não distribua esse arquivo para os alunos.
+- As soluções completas estão em [`GABARITO.md`](./GABARITO.md) e [`vulnshop/GABARITO.md`](./vulnshop/GABARITO.md). Não distribua esses arquivos para os alunos.
 - Distribua aos alunos apenas as URLs e os briefings. O código-fonte contém anotações do instrutor e aponta diretamente para as falhas.
 - As flags são definidas no `docker-compose.yml`, nas variáveis `FLAG`. Para trocar uma flag, basta alterar o valor e recriar o serviço (`docker compose up -d --force-recreate <serviço>`), sem precisar rebuildar a imagem.
 - Nos CTFs 04, 05, 07, 09 e 11 a aplicação escreve a flag em `/tmp/flag.txt` no startup, a partir da variável `FLAG`.
 - O CTF 06 tem um segundo container, `ctf06-flag-service`, sem porta publicada. Ele só é alcançável pela rede Docker. Não publique essa porta no host. O nome do serviço não é divulgado no briefing: os alunos precisam descobri-lo pelo histórico de pré-visualizações, pelo `/debug` ou pelo `robots.txt`.
+- A VulnShop usa variáveis de flag separadas: `FLAG_SQLI`, `FLAG_ADMIN`, `FLAG_IDOR`, `FLAG_BOLA` e `FLAG_TRAVERSAL` no container `vulnshop`, e `FLAG_CMDI` apenas no container interno `shipping-service`.
+- O `shipping-service` não publica porta no host e não tem acesso ao banco, às notas fiscais nem às demais flags. Isso evita que o Command Injection leia os outros segredos da aplicação. Não publique a porta 8000 desse serviço.
+- As credenciais do administrador da VulnShop não são divulgadas. O caminho pretendido é adulterar o cookie `shop_session` ou usar o mass assignment no cadastro. A chave `X-API-Key` da conta `demo` aparece no perfil e na página `/api`; isso é intencional para o exercício de BOLA.
+- A VulnShop também contém falhas extras (XSS refletido, open redirect, CSRF e senhas em texto puro) que podem ser discutidas sem flag.
 - Os containers já rodam com usuário não-root, filesystem somente leitura, `/tmp` em `tmpfs`, `no-new-privileges` e todas as capabilities removidas.
 - As aplicações usam Gunicorn com um worker, adequado para o volume de um minicurso. Não é uma configuração de produção.
 - Tempo estimado: 10 a 20 minutos por desafio fácil, 20 a 40 minutos por desafio médio e 40 a 60 minutos por desafio difícil.

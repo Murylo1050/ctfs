@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="breadcrumb">Início / Carrinho</div>
+
+  <div class="section-head">
+    <div>
+      <h1 class="mt-0 mb-0">Seu carrinho</h1>
+      <p>{{ items|length }} item(ns) selecionado(s).</p>
+    </div>
+  </div>
+
+  {% if items %}
+    <div class="two-col">
+      <section class="panel">
+        {% for item in items %}
+          <div class="cart-row">
+            <div class="cart-icon" aria-hidden="true">{{ item.icon }}</div>
+            <div>
+              <h3>{{ item.name }}</h3>
+              <p>{{ item.category }} · {{ item.price|brl }} cada</p>
+            </div>
+            <div class="cart-actions">
+              <form class="qty-form" method="post" action="{{ url_for('cart_update') }}">
+                <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99"
+                       aria-label="Quantidade de {{ item.name }}">
+                <button class="btn small secondary" type="submit">Atualizar</button>
+              </form>
+              <form class="inline-form" method="post" action="{{ url_for('cart_remove') }}">
+                <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                <button class="btn small ghost" type="submit">Remover</button>
+              </form>
+            </div>
+            <div class="price">{{ (item.price * item.quantity)|brl }}</div>
+          </div>
+        {% endfor %}
+      </section>
+
+      <aside class="panel soft">
+        <h2 class="mt-0">Resumo</h2>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <strong>{{ total|brl }}</strong>
+        </div>
+        <div class="summary-row">
+          <span>Frete</span>
+          <span class="muted">calculado no checkout</span>
+        </div>
+        <div class="total-box">
+          <span>Total</span>
+          <strong>{{ total|brl }}</strong>
+        </div>
+        <p class="mt-2">
+          <a class="btn block" href="{{ url_for('checkout') }}">Finalizar compra</a>
+        </p>
+        <p class="mb-0">
+          <a class="btn ghost block" href="{{ url_for('products') }}">Continuar comprando</a>
+        </p>
+      </aside>
+    </div>
+  {% else %}
+    <div class="empty">
+      <span class="big">🛒</span>
+      Seu carrinho está vazio.
+      <p class="mt-1"><a class="btn" href="{{ url_for('products') }}">Ver produtos</a></p>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="panel auth-card">
+    <a class="brand" href="{{ url_for('index') }}">
+      <span class="brand-mark">VS</span>
+      VulnShop
+    </a>
+    <h1>Criar conta</h1>
+    <p class="muted">Leva menos de um minuto.</p>
+
+    {% if error %}
+      <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form class="stack" method="post" action="{{ url_for('register') }}">
+      <div class="field">
+        <label for="full_name">Nome completo</label>
+        <input id="full_name" name="full_name" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="username">Usuário</label>
+        <input id="username" name="username" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="password">Senha</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" minlength="4" required>
+      </div>
+      <input type="hidden" name="role" value="customer">
+      <button class="btn block" type="submit">Criar conta</button>
+    </form>
+
+    <div class="auth-footer">
+      Já tem uma conta?
+      <a href="{{ url_for('login') }}">Entrar</a>.
+    </div>
+  </div>
+{% endblock %}

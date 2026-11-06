@@ -1,0 +1,14 @@
+{% macro product_card(product) %}
+  <article class="product-card">
+    <div class="product-visual" aria-hidden="true">{{ product.icon }}</div>
+    <div class="product-body">
+      <span class="badge gray">{{ product.category }}</span>
+      <h3><a href="{{ url_for('product', product_id=product.id) }}">{{ product.name }}</a></h3>
+      <p>{{ product.description }}</p>
+      <div class="product-meta">
+        <span class="price">{{ product.price|brl }}</span>
+        <a class="btn small" href="{{ url_for('product', product_id=product.id) }}">Ver</a>
+      </div>
+    </div>
+  </article>
+{% endmacro %}

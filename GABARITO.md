@@ -1,4 +1,4 @@
-# Gabarito — 11 CTFs Web
+# Gabarito — 11 CTFs Web + VulnShop
 
 > Material do instrutor. Não distribua para os alunos.
 
@@ -17,6 +17,19 @@
 | 09 | ImportaXML | médio | `flag{xxe_f1l3_r34d}` |
 | 10 | Admin API | difícil | `flag{jwt_4lg0r1thm_c0nfus10n}` |
 | 11 | Session Store | difícil | `flag{p1ckl3_d3s3r14l1z4t10n}` |
+
+### VulnShop — flags principais
+
+| Desafio | Vulnerabilidade | Flag |
+|---------|-----------------|------|
+| Busca oculta | SQL Injection na busca | `flag{sql1_s3arch_h1dd3n}` |
+| Frete sob demanda | Command Injection no cálculo de frete | `flag{cmdi_fr3t3_c4lc}` |
+| Sessão de administrador | Cookie `shop_session` sem assinatura | `flag{c00k13s_r0l3_adm1n}` |
+| Pedido alheio | IDOR em `/orders/<id>` | `flag{1d0r_0rd3r_1001}` |
+| API de pedidos | BOLA em `/api/v1/orders/<id>` | `flag{b0l4_4p1_0rd3r_1003}` |
+| Nota fiscal indiscreta | Path Traversal no download de nota | `flag{p4th_tr4v3rs4l_1nv01c3}` |
+
+O passo a passo completo da VulnShop está em [`vulnshop/GABARITO.md`](./vulnshop/GABARITO.md).
 
 ## CTF 01 — Cookie Monsters
 
@@ -750,3 +763,13 @@ O servidor chama `pickle.loads` em um valor controlado pelo cliente. `pickle` n�
 - Se precisar de estado no cliente, usar cookies assinados (por exemplo, a sessão do Flask com `itsdangerous`) e manter dados sensíveis no servidor.
 - Se `pickle` for inevitável, usar um `Unpickler` restrito com allowlist de classes e nunca aceitar payloads externos.
 - Aplicar menor privilégio e manter segredos fora do alcance do processo da aplicação.
+
+---
+
+## VulnShop — aplicação integrada
+
+A VulnShop está em http://localhost:8012 e tem guia próprio, com comandos `curl`, causa raiz e correção de cada falha:
+
+- [`vulnshop/GABARITO.md`](./vulnshop/GABARITO.md)
+
+Além das 6 flags principais, o guia cobre as falhas extras: XSS refletido na busca, open redirect no login, mass assignment no cadastro, CSRF nos formulários, senhas em texto puro e exposição da chave de API no perfil.

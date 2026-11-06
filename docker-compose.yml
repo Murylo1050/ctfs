@@ -326,3 +326,66 @@ services:
       retries: 3
       start_period: 10s
     restart: unless-stopped
+
+  vulnshop:
+    build:
+      context: ./vulnshop
+    image: vulnshop-lab
+    container_name: vulnshop
+    environment:
+      FLAG_SQLI: "flag{sql1_s3arch_h1dd3n}"
+      FLAG_ADMIN: "flag{c00k13s_r0l3_adm1n}"
+      FLAG_IDOR: "flag{1d0r_0rd3r_1001}"
+      FLAG_BOLA: "flag{b0l4_4p1_0rd3r_1003}"
+      FLAG_TRAVERSAL: "flag{p4th_tr4v3rs4l_1nv01c3}"
+      SHIPPING_URL: "http://shipping-service:8000/quote"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8012:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    depends_on:
+      shipping-service:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  shipping-service:
+    build:
+      context: ./vulnshop
+      dockerfile: shipping.Dockerfile
+    image: vulnshop-shipping
+    container_name: vulnshop-shipping
+    environment:
+      FLAG_CMDI: "flag{cmdi_fr3t3_c4lc}"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped

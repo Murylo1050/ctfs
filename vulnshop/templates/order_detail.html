@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="breadcrumb">
+    <a href="{{ url_for('orders') }}">Meus pedidos</a> / Pedido #{{ order.id }}
+  </div>
+
+  <div class="section-head">
+    <div>
+      <h1 class="mt-0 mb-0">Pedido #{{ order.id }}</h1>
+      <p>Realizado em {{ order.created_at }} por <code>{{ owner.username }}</code>.</p>
+    </div>
+    <span class="status {% if order.status == 'Pago' %}paid{% elif order.status == 'Em trânsito' %}shipping{% endif %}">
+      {{ order.status }}
+    </span>
+  </div>
+
+  <div class="two-col">
+    <section class="panel">
+      <h2 class="mt-0">Itens do pedido</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Qtd.</th>
+              <th>Unitário</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+              <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unit_price|brl }}</td>
+                <td>{{ (item.unit_price * item.quantity)|brl }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="total-box">
+        <span>Total do pedido</span>
+        <strong>{{ order.total|brl }}</strong>
+      </div>
+
+      {% if order.customer_note %}
+        <h2 class="mt-2">Observação do cliente</h2>
+        <div class="order-note">{{ order.customer_note }}</div>
+      {% endif %}
+    </section>
+
+    <aside class="stack">
+      <section class="panel">
+        <h2 class="mt-0">Entrega</h2>
+        <p class="mb-1"><strong>{{ order.shipping_name }}</strong></p>
+        <p class="muted mb-1">{{ order.shipping_address }}</p>
+        <p class="muted mb-1">{{ order.shipping_city }} · CEP {{ order.shipping_zip }}</p>
+        <p class="muted mb-0">Pagamento: {{ order.payment_method }}</p>
+      </section>
+
+      <section class="panel soft">
+        <h2 class="mt-0">Nota fiscal</h2>
+        <p class="muted small">
+          A nota fiscal simplificada deste pedido está disponível para download.
+        </p>
+        <a class="btn block" href="{{ url_for('invoice_download', file=invoice_file) }}">
+          Baixar nota fiscal (.txt)
+        </a>
+      </section>
+
+      <section class="panel soft">
+        <h3 class="mt-0">Precisa de ajuda?</h3>
+        <p class="muted small mb-0">
+          Fale com o atendimento informando o número do pedido.
+        </p>
+      </section>
+    </aside>
+  </div>
+{% endblock %}

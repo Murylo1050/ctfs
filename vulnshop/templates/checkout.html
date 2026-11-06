@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="breadcrumb">
+    <a href="{{ url_for('cart') }}">Carrinho</a> / Finalizar compra
+  </div>
+
+  <div class="section-head">
+    <div>
+      <h1 class="mt-0 mb-0">Finalizar compra</h1>
+      <p>Confirme os dados de entrega e o pagamento.</p>
+    </div>
+  </div>
+
+  {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+  {% endif %}
+
+  {% if not items %}
+    <div class="empty">
+      <span class="big">🛒</span>
+      Não há itens no carrinho.
+      <p class="mt-1"><a class="btn" href="{{ url_for('products') }}">Ver produtos</a></p>
+    </div>
+  {% else %}
+    <div class="checkout-grid">
+      <section class="panel">
+        <h2 class="mt-0">Dados de entrega</h2>
+        <form class="stack" method="post" action="{{ url_for('checkout') }}">
+          <div class="field">
+            <label for="shipping_name">Nome do destinatário</label>
+            <input id="shipping_name" name="shipping_name" value="{{ g.user.username }}" required>
+          </div>
+          <div class="field">
+            <label for="shipping_address">Endereço</label>
+            <input id="shipping_address" name="shipping_address" placeholder="Rua, número e complemento" required>
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label for="shipping_city">Cidade</label>
+              <input id="shipping_city" name="shipping_city" required>
+            </div>
+            <div class="field">
+              <label for="shipping_zip">CEP</label>
+              <input id="shipping_zip" name="shipping_zip" inputmode="numeric" placeholder="00000-000" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="payment_method">Pagamento</label>
+            <select id="payment_method" name="payment_method">
+              <option value="PIX">PIX</option>
+              <option value="Cartão de crédito">Cartão de crédito</option>
+              <option value="Boleto">Boleto</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="customer_note">Observação do pedido (opcional)</label>
+            <textarea id="customer_note" name="customer_note" placeholder="Ex.: embalar para presente"></textarea>
+          </div>
+          <button class="btn block" type="submit">Confirmar pedido</button>
+        </form>
+      </section>
+
+      <aside class="panel soft">
+        <h2 class="mt-0">Resumo do pedido</h2>
+        {% for item in items %}
+          <div class="summary-row">
+            <span>{{ item.name }} × {{ item.quantity }}</span>
+            <strong>{{ (item.price * item.quantity)|brl }}</strong>
+          </div>
+        {% endfor %}
+        <div class="total-box">
+          <span>Total</span>
+          <strong>{{ total|brl }}</strong>
+        </div>
+        <p class="muted small mt-2 mb-0">
+          O valor do frete é estimado pela transportadora após a confirmação.
+          Esta compra é uma simulação de laboratório e não gera cobrança real.
+        </p>
+      </aside>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="panel narrow">
+    <span class="badge orange">Erro {{ code }}</span>
+    <h1>{{ code }}</h1>
+    <p class="muted">{{ message }}</p>
+    <p class="mt-2 mb-0">
+      <a class="btn" href="{{ url_for('index') }}">Voltar para a loja</a>
+    </p>
+  </div>
+{% endblock %}

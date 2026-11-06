@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="breadcrumb">Início / API</div>
+
+  <div class="section-head">
+    <div>
+      <h1 class="mt-0 mb-0">API da VulnShop</h1>
+      <p>Integração para consulta de pedidos por aplicativos parceiros.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <section class="panel">
+      <h2 class="mt-0">Autenticação</h2>
+      <p>
+        Envie a chave da sua conta no cabeçalho <code>X-API-Key</code>. A chave
+        também pode ser passada pelo parâmetro <code>api_key</code>.
+      </p>
+      <p class="muted small">
+        A chave da conta <code>demo</code> neste ambiente é:
+      </p>
+      <div class="api-key">{{ demo_key }}</div>
+
+      <h2 class="mt-2">Consultar pedido</h2>
+      <p><code>GET /api/v1/orders/&lt;id&gt;</code></p>
+      <p class="muted small">
+        Retorna status, itens, dados de entrega, observações do cliente e a
+        nota interna do pedido.
+      </p>
+      <pre class="code-block">curl -s \
+  -H "X-API-Key: {{ demo_key }}" \
+  http://localhost:8012/api/v1/orders/1002</pre>
+    </section>
+
+    <aside class="panel soft">
+      <h2 class="mt-0">Exemplo de resposta</h2>
+      <pre class="code-block">{
+  "id": 1002,
+  "status": "Em trânsito",
+  "total": 329.9,
+  "owner": {
+    "username": "demo",
+    "email": "demo@vulnshop.local"
+  },
+  "items": [
+    {
+      "name": "Teclado Mecânico K2",
+      "unit_price": 329.9,
+      "quantity": 1
+    }
+  ],
+  "customer_note": "...",
+  "internal_note": "..."
+}</pre>
+      <p class="muted small mt-2 mb-0">
+        A documentação é pública. As chaves são individuais e aparecem na página
+        <a href="{{ url_for('profile') }}">Minha conta</a>.
+      </p>
+    </aside>
+  </div>
+{% endblock %}

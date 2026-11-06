@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ title or "VulnShop" }}{% endblock %} · VulnShop</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="{{ url_for('index') }}">
+        <span class="brand-mark">VS</span>
+        VulnShop
+      </a>
+
+      <form class="search-form" action="{{ url_for('search') }}" method="get" role="search">
+        <input type="search" name="q" value="{{ request.args.get('q', '') }}"
+               placeholder="Buscar produtos..." aria-label="Buscar produtos">
+        <button class="btn small" type="submit">Buscar</button>
+      </form>
+
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a class="nav-link" href="{{ url_for('index') }}">Início</a>
+        <a class="nav-link" href="{{ url_for('products') }}">Produtos</a>
+
+        {% if g.user %}
+          <a class="nav-link" href="{{ url_for('cart') }}">
+            Carrinho{% if cart_count %} <span class="badge orange">{{ cart_count }}</span>{% endif %}
+          </a>
+          <a class="nav-link" href="{{ url_for('orders') }}">Pedidos</a>
+          <a class="nav-link" href="{{ url_for('shipping') }}">Frete</a>
+          <a class="nav-link" href="{{ url_for('profile') }}">{{ g.user.username }}</a>
+          {% if is_admin %}
+            <a class="nav-link admin" href="{{ url_for('admin') }}">Admin</a>
+          {% endif %}
+          <a class="nav-link" href="{{ url_for('logout') }}">Sair</a>
+        {% else %}
+          <a class="nav-link" href="{{ url_for('login') }}">Entrar</a>
+          <a class="nav-link accent" href="{{ url_for('register') }}">Criar conta</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>VulnShop · comércio digital de demonstração</span>
+      <span>Ambiente de laboratório · aplicação intencionalmente vulnerável</span>
+    </div>
+  </footer>
+</body>
+</html>

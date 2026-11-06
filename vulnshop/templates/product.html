@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% from "_product_card.html" import product_card %}
+
+{% block content %}
+  <div class="breadcrumb">
+    <a href="{{ url_for('index') }}">Início</a> /
+    <a href="{{ url_for('products') }}">Produtos</a> /
+    {{ product.name }}
+  </div>
+
+  <div class="product-detail">
+    <div class="product-art" aria-hidden="true">{{ product.icon }}</div>
+
+    <div class="product-info">
+      <span class="badge">{{ product.category }}</span>
+      <h1>{{ product.name }}</h1>
+      <p class="lead">{{ product.description }}</p>
+      <span class="price">{{ product.price|brl }}</span>
+
+      <p class="muted small">
+        {{ product.stock }} unidade(s) em estoque ·
+        envio em até 24h úteis
+      </p>
+
+      {% if g.user %}
+        <form class="buy-row" method="post" action="{{ url_for('cart_add') }}">
+          <input type="hidden" name="product_id" value="{{ product.id }}">
+          <div class="field">
+            <label for="quantity">Quantidade</label>
+            <input id="quantity" type="number" name="quantity" value="1" min="1" max="99">
+          </div>
+          <button class="btn" type="submit">Adicionar ao carrinho</button>
+        </form>
+      {% else %}
+        <p class="buy-row">
+          <a class="btn" href="{{ url_for('login', next=request.path) }}">Entrar para comprar</a>
+        </p>
+      {% endif %}
+
+      <ul class="feature-list">
+        <li>Produto original com garantia de 12 meses.</li>
+        <li>Nota fiscal emitida automaticamente após o pedido.</li>
+        <li>Frete calculado por CEP no carrinho.</li>
+      </ul>
+    </div>
+  </div>
+
+  {% if related %}
+    <section class="mt-2">
+      <div class="section-head">
+        <div>
+          <h2>Você também pode gostar</h2>
+          <p>Outros itens da categoria {{ product.category }}.</p>
+        </div>
+      </div>
+      <div class="product-grid">
+        {% for item in related %}
+          {{ product_card(item) }}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

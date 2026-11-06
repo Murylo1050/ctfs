@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "_product_card.html" import product_card %}
+
+{% block content %}
+  <div class="breadcrumb">Início / Produtos</div>
+
+  <div class="section-head">
+    <div>
+      <h1 class="mt-0 mb-0">Catálogo</h1>
+      <p>{{ products|length }} produto(s) disponível(is).</p>
+    </div>
+  </div>
+
+  <div class="cat-pills">
+    <a class="cat-pill {% if not selected_category %}active{% endif %}"
+       href="{{ url_for('products') }}">Todos</a>
+    {% for category in categories %}
+      <a class="cat-pill {% if selected_category == category.category %}active{% endif %}"
+         href="{{ url_for('products', category=category.category) }}">
+        {{ category.category }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <div class="product-grid">
+    {% for product in products %}
+      {{ product_card(product) }}
+    {% else %}
+      <div class="empty">
+        <span class="big">🛒</span>
+        Nenhum produto encontrado nesta categoria.
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

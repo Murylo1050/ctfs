@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% from "_product_card.html" import product_card %}
+
+{% block content %}
+  <section class="hero">
+    <div class="hero-card">
+      <p class="eyebrow">VulnShop · tecnologia para o dia a dia</p>
+      <h1>Equipamentos que acompanham o seu ritmo.</h1>
+      <p>
+        Periféricos, áudio e acessórios escolhidos para deixar a rotina mais
+        produtiva. Frete calculado em tempo real e entrega para todo o Brasil.
+      </p>
+      <a class="btn" href="{{ url_for('products') }}">Explorar produtos →</a>
+    </div>
+
+    <div class="hero-side">
+      <div class="hero-note">
+        <h3>Entrega rápida</h3>
+        <p>Enviamos em até 24 horas úteis após a confirmação do pagamento.</p>
+        <span class="big">3–7 dias</span>
+      </div>
+      <div class="hero-note">
+        <h3>Frete transparente</h3>
+        <p>Calcule o valor do frete por CEP diretamente na loja.</p>
+        <span class="big">a partir de R$ 19,90</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div>
+        <h2>Destaques da loja</h2>
+        <p>Uma seleção dos produtos mais procurados.</p>
+      </div>
+      <a class="btn ghost small" href="{{ url_for('products') }}">Ver catálogo completo</a>
+    </div>
+
+    <div class="product-grid">
+      {% for product in products %}
+        {{ product_card(product) }}
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if not g.user %}
+    <section class="panel soft mt-2">
+      <div class="two-col">
+        <div>
+          <h2 class="mt-0">Acompanhe seus pedidos</h2>
+          <p class="muted">
+            Crie uma conta para salvar o carrinho, consultar pedidos e baixar
+            notas fiscais.
+          </p>
+          <p class="mb-0">
+            <a class="btn" href="{{ url_for('register') }}">Criar minha conta</a>
+            <a class="btn ghost" href="{{ url_for('login') }}">Já tenho conta</a>
+          </p>
+        </div>
+        <div>
+          <h3 class="mt-0">Conta de demonstração</h3>
+          <p class="muted mb-1">
+            Para explorar a loja, use <code>demo</code> / <code>demo123</code>.
+            Também há a conta <code>alice</code> / <code>alice123</code>.
+          </p>
+          <p class="muted mb-0">
+            Este ambiente é usado em um minicurso de segurança e contém falhas
+            intencionais.
+          </p>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

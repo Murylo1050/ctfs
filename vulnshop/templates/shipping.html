@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="breadcrumb">Início / Calcular frete</div>
+
+  <div class="two-col">
+    <section class="panel">
+      <h1 class="mt-0">Calcular frete</h1>
+      <p class="muted">
+        Informe o CEP de entrega e o peso estimado do pedido. O cálculo é
+        processado pelo serviço interno de logística.
+      </p>
+
+      {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+      {% endif %}
+
+      <form class="stack" method="post" action="{{ url_for('shipping') }}">
+        <div class="field">
+          <label for="cep">CEP de entrega</label>
+          <input id="cep" name="cep" value="{{ cep }}" placeholder="01310-100" required>
+        </div>
+        <div class="field">
+          <label for="weight">Peso (kg)</label>
+          <input id="weight" name="weight" value="{{ weight }}" inputmode="decimal" placeholder="1.5">
+        </div>
+        <button class="btn block" type="submit">Calcular frete</button>
+      </form>
+    </section>
+
+    <aside class="panel soft">
+      <h2 class="mt-0">Resultado da consulta</h2>
+      {% if output %}
+        <pre class="code-block">{{ output }}</pre>
+      {% elif not error %}
+        <p class="muted mb-0">
+          O resultado aparecerá aqui após o envio do formulário.
+        </p>
+      {% endif %}
+      <p class="muted small mt-2 mb-0">
+        Valores estimados. O frete final pode variar conforme a transportadora.
+      </p>
+    </aside>
+  </div>
+{% endblock %}
