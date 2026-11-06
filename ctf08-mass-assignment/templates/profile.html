@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Meu perfil{% endblock %}
+
+{% block content %}
+  <p class="welcome">Logado como <strong>{{ user.username }}</strong>.</p>
+
+  {% if error %}
+    <p class="alert alert-error">{{ error }}</p>
+  {% endif %}
+
+  <section class="debug">
+    <h3>Dados atuais</h3>
+    <p>Papel: <code>{{ user.role }}</code></p>
+  </section>
+
+  <form method="post" action="{{ url_for('update_profile') }}" class="stack">
+    <label>
+      Nome
+      <input name="name" value="{{ user.name }}" required>
+    </label>
+    <label>
+      E-mail
+      <input name="email" type="email" value="{{ user.email }}" required>
+    </label>
+    <button type="submit">Salvar perfil</button>
+  </form>
+
+  <p class="actions">
+    <a class="link" href="{{ url_for('admin') }}">Área administrativa</a>
+    · <a class="link" href="{{ url_for('logout') }}">Sair</a>
+  </p>
+{% endblock %}

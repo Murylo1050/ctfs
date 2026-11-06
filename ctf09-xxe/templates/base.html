@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Importar XML{% endblock %} · CTF 09</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="card">
+    <header class="brand">
+      <span class="badge">CTF 09 · médio</span>
+      <h1>ImportaXML</h1>
+      <p class="muted">Importe o catálogo de produtos em XML. O servidor lê o documento e confirma os campos.</p>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+      Ambiente de laboratório · não use em produção
+    </footer>
+  </main>
+</body>
+</html>

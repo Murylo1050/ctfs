@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Painel{% endblock %}
+
+{% block content %}
+  {% if error %}
+    <p class="alert alert-error">{{ error }}</p>
+  {% endif %}
+
+  <section class="debug">
+    <h3>Token atual</h3>
+    <code class="wrap">{{ token }}</code>
+    <p>Payload decodificado:</p>
+    <pre>{{ payload | tojson(indent=2) }}</pre>
+  </section>
+
+  <p class="hint">
+    Chave pública: <a class="link" href="{{ url_for('pubkey') }}">/pubkey</a>
+  </p>
+
+  <p class="actions">
+    <a class="link" href="{{ url_for('admin') }}">Acessar área administrativa</a>
+    · <a class="link" href="{{ url_for('logout') }}">Sair</a>
+  </p>
+{% endblock %}

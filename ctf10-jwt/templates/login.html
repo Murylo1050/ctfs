@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar{% endblock %}
+
+{% block content %}
+  {% if error %}
+    <p class="alert alert-error">{{ error }}</p>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('login') }}" class="stack">
+    <label>
+      Usuário
+      <input name="username" autocomplete="username" required autofocus>
+    </label>
+    <label>
+      Senha
+      <input name="password" type="password" autocomplete="current-password" required>
+    </label>
+    <button type="submit">Entrar</button>
+  </form>
+
+  <p class="hint">
+    Conta de demonstração: <code>guest</code> / <code>guest</code>.
+    A chave pública de verificação está em <code>/pubkey</code>.
+  </p>
+
+  <!-- TODO(security): não aceitar HS256 quando a chave é um par RSA. -->
+{% endblock %}

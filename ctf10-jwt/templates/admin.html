@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Painel administrativo{% endblock %}
+
+{% block content %}
+  <section class="result success">
+    <span class="badge badge-success">ADMIN</span>
+    <h2>Token aceito</h2>
+    <p>O servidor confiou na assinatura de um token forjado. A flag é:</p>
+    <code class="flag">{{ flag }}</code>
+  </section>
+
+  <p class="actions">
+    <a class="link" href="{{ url_for('logout') }}">Sair</a>
+  </p>
+{% endblock %}

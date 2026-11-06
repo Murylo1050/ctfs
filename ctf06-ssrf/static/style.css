@@ -233,6 +233,24 @@ code {
   color: var(--accent-2);
 }
 
+.history {
+  display: grid;
+  gap: 10px;
+}
+
+.history-item {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(8, 17, 29, 0.6);
+}
+
+.history-item .muted {
+  font-size: 0.78rem;
+}
+
 .footer {
   margin-top: 28px;
   padding-top: 18px;

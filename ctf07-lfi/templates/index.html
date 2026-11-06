@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Documentos{% endblock %}
+
+{% block content %}
+  <h2>Documentos disponíveis</h2>
+
+  <div class="note-list">
+    {% for doc in documents %}
+      <a class="note-link" href="{{ url_for('download', file=doc.name) }}">
+        <span class="note-id">{{ doc.size }}</span>
+        <span>
+          <strong>{{ doc.title }}</strong>
+          <span class="note-preview">{{ doc.name }}</span>
+        </span>
+      </a>
+    {% endfor %}
+  </div>
+
+  <form method="get" action="{{ url_for('download') }}" class="stack">
+    <label>
+      Baixar outro arquivo
+      <input name="file" value="{{ selected or '' }}" placeholder="readme.txt" required>
+    </label>
+    <button type="submit">Abrir</button>
+  </form>
+
+  <p class="hint">
+    Os documentos são servidos a partir do diretório <code>/app/documents</code>.
+  </p>
+
+  <!-- TODO(security): normalizar o caminho e garantir que ele permaneça dentro do diretório. -->
+
+  {% if error %}
+    <p class="alert alert-error">{{ error }}</p>
+  {% endif %}
+
+  {% if content is defined %}
+    <section class="debug">
+      <h3>{{ selected }}</h3>
+      <pre>{{ content }}</pre>
+    </section>
+  {% endif %}
+{% endblock %}

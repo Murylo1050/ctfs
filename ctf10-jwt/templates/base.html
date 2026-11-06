@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Entrar{% endblock %} · CTF 10</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="card">
+    <header class="brand">
+      <span class="badge">CTF 10 · difícil</span>
+      <h1>Admin API</h1>
+      <p class="muted">API administrativa protegida por JWT. Só tokens com papel <code>admin</code> veem a flag.</p>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+      Ambiente de laboratório · não use em produção
+    </footer>
+  </main>
+</body>
+</html>

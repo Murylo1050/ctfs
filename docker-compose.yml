@@ -191,3 +191,138 @@ services:
       retries: 3
       start_period: 10s
     restart: unless-stopped
+
+  ctf07-lfi:
+    build:
+      context: ./ctf07-lfi
+    container_name: ctf07-lfi
+    environment:
+      FLAG: "flag{p4th_tr4v3rs4l_b4s1c4}"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8007:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  ctf08-mass-assignment:
+    build:
+      context: ./ctf08-mass-assignment
+    container_name: ctf08-mass-assignment
+    environment:
+      FLAG: "flag{m4ss_4ss1gnm3nt_adm1n}"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8008:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  ctf09-xxe:
+    build:
+      context: ./ctf09-xxe
+    container_name: ctf09-xxe
+    environment:
+      FLAG: "flag{xxe_f1l3_r34d}"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8009:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  ctf10-jwt:
+    build:
+      context: ./ctf10-jwt
+    container_name: ctf10-jwt
+    environment:
+      FLAG: "flag{jwt_4lg0r1thm_c0nfus10n}"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8010:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  ctf11-deserialization:
+    build:
+      context: ./ctf11-deserialization
+    container_name: ctf11-deserialization
+    environment:
+      FLAG: "flag{p1ckl3_d3s3r14l1z4t10n}"
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8011:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped

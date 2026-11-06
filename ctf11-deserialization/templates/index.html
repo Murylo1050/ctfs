@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Meu perfil{% endblock %}
+
+{% block content %}
+  {% if error %}
+    <p class="alert alert-error">{{ error }}</p>
+  {% endif %}
+
+  {% if restored %}
+    <p class="alert alert-success">Backup restaurado com sucesso.</p>
+  {% endif %}
+
+  {% if profile %}
+    <section class="debug">
+      <h3>Perfil atual</h3>
+      {% if profile is mapping %}
+        <p>Nome: <code>{{ profile.name }}</code></p>
+        <p>Tema: <code>{{ profile.theme }}</code></p>
+      {% else %}
+        <pre>{{ profile }}</pre>
+      {% endif %}
+      <p>Cookie <code>profile</code>:</p>
+      <code class="wrap">{{ raw }}</code>
+    </section>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('restore') }}" class="stack">
+    <label>
+      Restaurar backup (base64)
+      <textarea name="profile" rows="6" placeholder="Cole aqui o valor do cookie profile"></textarea>
+    </label>
+    <button type="submit">Restaurar</button>
+  </form>
+
+  <p class="hint">
+    O backup é gerado no servidor com <code>pickle</code> e codificado em base64.
+  </p>
+
+  <!-- TODO(security): nunca desserializar dados controlados pelo cliente com pickle. -->
+{% endblock %}

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Meu perfil{% endblock %} · CTF 11</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="card">
+    <header class="brand">
+      <span class="badge">CTF 11 · difícil</span>
+      <h1>Session Store</h1>
+      <p class="muted">Preferências de perfil persistidas em um cookie. Faça backup e restaure quando quiser.</p>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+      Ambiente de laboratório · não use em produção
+    </footer>
+  </main>
+</body>
+</html>

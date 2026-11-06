@@ -31,4 +31,22 @@
       <pre>{{ result.body }}</pre>
     </section>
   {% endif %}
+
+  {% if history %}
+    <section class="debug">
+      <h3>Pré-visualizações recentes</h3>
+      <div class="history">
+        {% for item in history %}
+          <div class="history-item">
+            <code class="wrap">{{ item.url }}</code>
+            <span class="muted">status {{ item.status }} · {{ item.when }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <p class="hint">
+    Diagnóstico do serviço: <a class="link" href="{{ url_for('debug') }}">/debug</a>
+  </p>
 {% endblock %}

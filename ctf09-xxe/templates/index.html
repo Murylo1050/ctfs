@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Importar XML{% endblock %}
+
+{% block content %}
+  <form method="post" action="{{ url_for('index') }}" class="stack">
+    <label>
+      Documento XML
+      <textarea name="xml" rows="14" required>{{ xml }}</textarea>
+    </label>
+    <button type="submit">Importar</button>
+  </form>
+
+  <p class="hint">
+    Formato esperado: elementos <code>nome</code>, <code>preco</code> e
+    <code>descricao</code> dentro de <code>&lt;produto&gt;</code>.
+  </p>
+
+  <!-- TODO(security): desabilitar DTDs e entidades externas no parser XML. -->
+
+  {% if error %}
+    <p class="alert alert-error">{{ error }}</p>
+  {% endif %}
+
+  {% if result %}
+    <section class="debug">
+      <h3>Produto importado</h3>
+      <p>Nome:</p>
+      <pre>{{ result.nome }}</pre>
+      <p>Preço:</p>
+      <pre>{{ result.preco }}</pre>
+      <p>Descrição:</p>
+      <pre>{{ result.descricao }}</pre>
+    </section>
+  {% endif %}
+{% endblock %}

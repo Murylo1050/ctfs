@@ -1,0 +1,7 @@
+RELATÓRIO FINANCEIRO - EXEMPLO
+
+Receitas: R$ 120.000,00
+Despesas: R$ 84.500,00
+Resultado: R$ 35.500,00
+
+Documento fictício do laboratório. A flag não está neste arquivo.
